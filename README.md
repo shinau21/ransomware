@@ -1,4 +1,6 @@
 # RANSOMWARE (ITSEC)
+
+Encryption Type : RSA AES
 Target OS : Windows
 Target File Encrypted : USERPROFILES
 
