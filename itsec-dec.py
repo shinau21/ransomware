@@ -5,6 +5,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
+pvk = '''Your RSA Private Key'''
 
 def defense(target):
     for p, d, f in os.walk(target):
@@ -17,7 +18,7 @@ def defense(target):
                         newFile = p + os.path.splitext(name)[0]
                         file_in = open(newFile, "wb")
 
-                        private_key = RSA.import_key(open("private.pem").read())
+                        private_key = RSA.import_key(pvk)
 
                         enc_session_key, nonce, tag, ciphertext = [ mfile.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1) ]
                         mfile.close()
@@ -41,5 +42,5 @@ def defense(target):
                     status = "All Files has been Decrypted"
 
 if __name__ == '__main__':
-    t0 = os.environ["USERPROFILE"] + "\\Videos\\"
+    t0 = os.environ["USERPROFILE"]
     defense(t0)
