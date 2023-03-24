@@ -35,7 +35,11 @@ def defense(target):
                         os.remove(os.path.join(p, name))
                 except:
                     continue
+                try:
+                    os.remove(os.path.join(p,"_readme.txt"))
+                except:
+                    status = "All Files has been Decrypted"
 
 if __name__ == '__main__':
-    t0 = os.environ["USERPROFILE"]
+    t0 = os.environ["USERPROFILE"] + "\\Videos\\"
     defense(t0)
