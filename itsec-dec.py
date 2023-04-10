@@ -63,7 +63,7 @@ def defense(target,log):
 
 if __name__ == '__main__':
     if (platform == 'win32'):
-        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
+        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:","M:","O:","P:","Q:","R:","S:","T:","U:","V:","W:","X:","Y:","Z:"]
         jlog = [os.environ["PROGRAMDATA"]+sp()+'Microsoft'+sp()+'Windows'+sp()+'Start Menu'+sp()+'Programs'+sp()+'StartUp']
         for i in range(len(t)):
             defense(t[i] + sp(),jlog)
